@@ -1,19 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import useSWR from 'swr';
 import { Room } from './types/api';
+import apiFetcher from './utils/apiFetcher';
 
 const App = () => {
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const { data: rooms, error } = useSWR<Room[], Error>('/rooms', apiFetcher);
 
-  useEffect(
-    () => {
-      fetch('http://localhost:8080/api/rooms')
-      .then( response => response.json() )
-      .then( (data: Room[]) => setRooms(data) );
-    },
-    []
-  );
-
-  if (rooms.length === 0) {
+  if (typeof rooms === 'undefined') {
     return <div>Loading...</div>;
   }
 
