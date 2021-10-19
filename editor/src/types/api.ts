@@ -17,3 +17,7 @@ export interface RoomConnection {
   toRoom: Room;
   direction: Direction;
 }
+
+export interface RoomInput {
+  name: string;
+}
