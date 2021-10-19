@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/api/rooms")
+@CrossOrigin
 public class RoomController {
 
     @Autowired

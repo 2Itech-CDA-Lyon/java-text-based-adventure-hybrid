@@ -1,24 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { Room } from './types/api';
 
-function App() {
+const App = () => {
+  const [rooms, setRooms] = useState<Room[]>([]);
+
+  useEffect(
+    () => {
+      fetch('http://localhost:8080/api/rooms')
+      .then( response => response.json() )
+      .then( (data: Room[]) => setRooms(data) );
+    },
+    []
+  );
+
+  if (rooms.length === 0) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>All rooms</h1>
+      <ul>
+        {
+          rooms.map(
+            room => <li key={room.id}>{room.name}</li>
+          )
+        }
+      </ul>
     </div>
   );
 }
