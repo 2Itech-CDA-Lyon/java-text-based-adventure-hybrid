@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { Button, Container, Table } from "react-bootstrap";
+import { ModifiableText } from "../components/common";
 import { AddRoomForm, RoomEditorContextProvider } from "../components/room-editor";
 import { RoomEditorContext } from "../components/room-editor/room-editor-context";
 
@@ -26,8 +27,13 @@ const RoomEditorPageContent = () => {
             rooms.map(
               room => (
                 <tr key={room.id}>
-                  <td>{room.id}</td>
-                  <td>{room.name}</td>
+                  <th>{room.id}</th>
+                  <td>
+                    <ModifiableText
+                      text={room.name}
+                      onSubmitHook={(text) => actions.update(room.id, { name: text })}
+                    />
+                  </td>
                   <td>
                     <Button variant="danger" size="sm" onClick={() => actions.remove(room.id)}>Delete</Button>
                   </td>

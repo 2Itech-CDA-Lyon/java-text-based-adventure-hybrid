@@ -1,18 +1,21 @@
-export interface Room {
-  id: number;
+export type Id = number;
+
+export interface Entity {
+  id: Id;
+}
+
+export interface Room extends Entity {
   name: string;
   connectionsFrom?: RoomConnection[];
   connectionsTo?: RoomConnection[];
 }
 
-export interface Direction {
-  id: number;
+export interface Direction extends Entity {
   name: string;
   command: string;
 }
 
-export interface RoomConnection {
-  id: number;
+export interface RoomConnection extends Entity {
   fromRoom: Room;
   toRoom: Room;
   direction: Direction;

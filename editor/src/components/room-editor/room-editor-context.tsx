@@ -1,14 +1,15 @@
 import { createContext, FC } from "react";
 import useSWR from "swr";
-import { Room, RoomInput } from "../../types/api";
+import { Id, Room, RoomInput } from "../../types/api";
 import apiFetcher from "../../utils/apiFetcher";
 
 interface RoomEditorContextValue {
   rooms: Room[],
   isValidating: boolean,
   actions: {
-    create: (newRoom: RoomInput) => void
-    remove: (id: number) => void
+    create: (newRoom: RoomInput) => void;
+    update: (id: Id, updatedRoom: Partial<RoomInput>) => void
+    remove: (id: Id) => void;
   }
 }
 
@@ -17,6 +18,7 @@ export const RoomEditorContext = createContext<RoomEditorContextValue>({
   isValidating: false,
   actions: {
     create: () => undefined,
+    update: () => undefined,
     remove: () => undefined,
   }
 });
@@ -38,7 +40,7 @@ const RoomEditorContextProvider: FC = ({ children }) => {
     .then( (data: Room) => mutate([ ...rooms, data ]) );
   }
 
-  const remove = (id: number) => {
+  const remove = (id: Id) => {
     fetch(`http://localhost:8080/api/rooms/${id}`, {
       method: 'DELETE',
     })
@@ -49,12 +51,25 @@ const RoomEditorContextProvider: FC = ({ children }) => {
     });
   }
 
+  const update = (id: Id, updatedRoom: Partial<RoomInput>) => {
+    fetch(`http://localhost:8080/api/rooms/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(updatedRoom),
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      }
+    })
+    .then( response => response.json() )
+    .then( (data: Room) => mutate(rooms.map( room => room.id === data.id ? data : room )) );
+  }
+
   const contextValue = {
     rooms,
     isValidating,
     actions: {
       create,
       remove,
+      update,
     }
   };
 
