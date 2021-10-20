@@ -1,29 +1,15 @@
 import { useState, FormEvent, useContext } from "react";
 import { Button, Card, Form } from "react-bootstrap"
-import { RoomInput, Room } from "../../types/api";
 import { RoomEditorContext } from "./room-editor-context";
 
 const AddRoomForm = () => {
-  const { rooms, mutate } = useContext(RoomEditorContext);
+  const { actions } = useContext(RoomEditorContext);
   
   const [name, setName] = useState('');
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    
-    const newRoom: RoomInput = {
-      name
-    };
-
-    fetch(`http://localhost:8080/api/rooms`, {
-      method: 'POST',
-      body: JSON.stringify(newRoom),
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      }
-    })
-    .then( response => response.json() )
-    .then( (data: Room) => mutate([ ...rooms, data ]) );
+    actions.create({ name });
   }
 
   return (

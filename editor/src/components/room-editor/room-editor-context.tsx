@@ -1,18 +1,24 @@
 import { createContext, FC } from "react";
-import useSWR, { KeyedMutator } from "swr";
-import { Room } from "../../types/api";
+import useSWR from "swr";
+import { Room, RoomInput } from "../../types/api";
 import apiFetcher from "../../utils/apiFetcher";
 
 interface RoomEditorContextValue {
   rooms: Room[],
   isValidating: boolean,
-  mutate: KeyedMutator<Room[]>,
+  actions: {
+    create: (newRoom: RoomInput) => void
+    remove: (id: number) => void
+  }
 }
 
 export const RoomEditorContext = createContext<RoomEditorContextValue>({
   rooms: [],
   isValidating: false,
-  mutate: () => new Promise<undefined>(()=>{}),
+  actions: {
+    create: () => undefined,
+    remove: () => undefined,
+  }
 });
 
 const RoomEditorContextProvider: FC = ({ children }) => {
@@ -20,10 +26,36 @@ const RoomEditorContextProvider: FC = ({ children }) => {
 
   const rooms = data || [];
 
+  const create = (newRoom: RoomInput) => {
+    fetch(`http://localhost:8080/api/rooms`, {
+      method: 'POST',
+      body: JSON.stringify(newRoom),
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      }
+    })
+    .then( response => response.json() )
+    .then( (data: Room) => mutate([ ...rooms, data ]) );
+  }
+
+  const remove = (id: number) => {
+    fetch(`http://localhost:8080/api/rooms/${id}`, {
+      method: 'DELETE',
+    })
+    .then( response => {
+      if (response.ok) {
+        mutate(rooms.filter( room => room.id !== id ))
+      }
+    });
+  }
+
   const contextValue = {
     rooms,
     isValidating,
-    mutate,
+    actions: {
+      create,
+      remove,
+    }
   };
 
   return (

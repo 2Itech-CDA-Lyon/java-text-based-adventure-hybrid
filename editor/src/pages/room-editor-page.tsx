@@ -1,10 +1,10 @@
 import { useContext } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Button, Container, Table } from "react-bootstrap";
 import { AddRoomForm, RoomEditorContextProvider } from "../components/room-editor";
 import { RoomEditorContext } from "../components/room-editor/room-editor-context";
 
 const RoomEditorPageContent = () => {
-  const { rooms, isValidating } = useContext(RoomEditorContext);
+  const { rooms, isValidating, actions } = useContext(RoomEditorContext);
 
   return (
     <Container>
@@ -18,6 +18,7 @@ const RoomEditorPageContent = () => {
           <tr>
             <th>#</th>
             <th>Name</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -27,6 +28,9 @@ const RoomEditorPageContent = () => {
                 <tr key={room.id}>
                   <td>{room.id}</td>
                   <td>{room.name}</td>
+                  <td>
+                    <Button variant="danger" size="sm" onClick={() => actions.remove(room.id)}>Delete</Button>
+                  </td>
                 </tr>
               )
             )
