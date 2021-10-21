@@ -1,5 +1,6 @@
-import { useContext } from "react";
+import { FC, useContext } from "react";
 import { Button, Container, Table } from "react-bootstrap";
+import { RouteComponentProps } from "react-router";
 import { ModifiableText } from "../components/common";
 import { AddRoomForm, RoomEditorContextProvider } from "../components/room-editor";
 import { RoomEditorContext } from "../components/room-editor/room-editor-context";
@@ -51,7 +52,7 @@ const RoomEditorPageContent = () => {
   );
 }
 
-const RoomEditorPage = () => {
+const RoomEditorPage: FC<RouteComponentProps> = () => {
   return (
     <RoomEditorContextProvider>
       <RoomEditorPageContent />
