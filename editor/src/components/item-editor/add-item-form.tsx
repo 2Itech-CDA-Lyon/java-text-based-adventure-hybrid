@@ -1,15 +1,25 @@
-import { useContext, useState, FormEvent } from "react";
+import { useContext, useState, FormEvent, useEffect } from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import { Room } from "../../types/api";
+import { RoomSelector } from "../common";
 import { RoomEditorContext } from "../room-editor/room-editor-context";
 import { ItemEditorContext } from "./item-editor-context";
 
 const AddItemForm = () => {
-  const { rooms, actions: { findById: findRoomById }, isValidating: isValidatingRooms } = useContext(RoomEditorContext);
+  const { rooms } = useContext(RoomEditorContext);
   const { actions } = useContext(ItemEditorContext);
   
   const [name, setName] = useState('');
-  const [room, setRoom] = useState<Room | undefined>();
+  const [room, setRoom] = useState<Room>({ id: 0, name: '' });
+
+  useEffect(
+    () => {
+      if (rooms && rooms.length > 0) {
+        setRoom(rooms[0])
+      }
+    },
+    [rooms]
+  )
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -34,20 +44,10 @@ const AddItemForm = () => {
           </Form.Group>
           <Form.Group className="mb-3" controlId="createFormRoom">
             <Form.Label>Room</Form.Label>
-            {!isValidatingRooms && <Form.Control
-              as="select"
-              size="sm"
-              value={(room || rooms[0]).id}
-              onChange={(event) => setRoom(findRoomById(Number(event.target.value)))}
-            >
-              {
-                rooms.map(
-                  room => (
-                    <option value={room.id}>{room.name}</option>
-                  )
-                )
-              }
-            </Form.Control>}
+            <RoomSelector
+              selectedRoom={room}
+              onChangeHook={(room) => setRoom(room)}
+            />
           </Form.Group>
           <Button type="submit" variant="primary" size="sm">Submit</Button>
         </Form>

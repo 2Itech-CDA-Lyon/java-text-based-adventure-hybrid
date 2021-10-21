@@ -1,11 +1,12 @@
 import { FC, useContext } from "react";
 import { Container, Table, Button, Form } from "react-bootstrap";
 import { RouteComponentProps } from "react-router";
-import { ModifiableText } from "../components/common";
+import { ModifiableText, RoomSelector } from "../components/common";
 import { AddItemForm } from "../components/item-editor";
 import ItemEditorContextProvider, { ItemEditorContext } from "../components/item-editor/item-editor-context";
 import { RoomEditorContextProvider } from "../components/room-editor";
 import { RoomEditorContext } from "../components/room-editor/room-editor-context";
+import { Room } from "../types/api";
 
 const ItemEditorPageContent: FC = () => {
   const { rooms, actions: { findById: findRoomById }, isValidating: isValidatingRooms } = useContext(RoomEditorContext);
@@ -40,20 +41,10 @@ const ItemEditorPageContent: FC = () => {
                     />
                   </td>
                   <td>
-                    <Form.Control
-                      as="select"
-                      size="sm"
-                      value={item.room?.id}
-                      onChange={(event) => actions.update(item.id, { room: findRoomById(Number(event.target.value)) })}
-                    >
-                      {
-                        !isValidatingRooms && rooms.map(
-                          room => (
-                            <option value={room.id}>{room.name}</option>
-                          )
-                        )
-                      }
-                    </Form.Control>
+                    <RoomSelector
+                      selectedRoom={item.room}
+                      onChangeHook={(room) => actions.update(item.id, { room })}
+                    />
                   </td>
                   <td>
                     <Button variant="danger" size="sm" onClick={() => actions.remove(item.id)}>Delete</Button>

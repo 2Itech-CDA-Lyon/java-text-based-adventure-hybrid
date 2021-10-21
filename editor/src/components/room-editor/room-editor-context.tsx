@@ -7,7 +7,7 @@ interface RoomEditorContextValue {
   rooms: Room[],
   isValidating: boolean,
   actions: {
-    findById: (id: Id) => Room | undefined;
+    findById: (id: Id) => Room;
     create: (newRoom: RoomInput) => void;
     update: (id: Id, updatedRoom: Partial<RoomInput>) => void;
     remove: (id: Id) => void;
@@ -18,7 +18,7 @@ export const RoomEditorContext = createContext<RoomEditorContextValue>({
   rooms: [],
   isValidating: false,
   actions: {
-    findById: () => undefined,
+    findById: () => ({ id: 0, name: '' }),
     create: () => undefined,
     update: () => undefined,
     remove: () => undefined,
@@ -30,7 +30,13 @@ const RoomEditorContextProvider: FC = ({ children }) => {
 
   const rooms = data || [];
 
-  const findById = (id: Id) => rooms.find( room => room.id === id );
+  const findById = (id: Id) => {
+    const result = rooms.find( room => room.id === id );
+    if (typeof result === 'undefined') {
+      throw new Error('Result of findById does not exist.');
+    }
+    return result;
+  }
 
   const create = (newRoom: RoomInput) => {
     fetch(`http://localhost:8080/api/rooms`, {
