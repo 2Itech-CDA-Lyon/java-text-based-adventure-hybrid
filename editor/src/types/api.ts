@@ -21,6 +21,16 @@ export interface RoomConnection extends Entity {
   direction: Direction;
 }
 
+export interface Item extends Entity {
+  name: string;
+  room?: Room;
+}
+
 export interface RoomInput {
   name: string;
+}
+
+export interface ItemInput {
+  name: string;
+  room: Room;
 }
