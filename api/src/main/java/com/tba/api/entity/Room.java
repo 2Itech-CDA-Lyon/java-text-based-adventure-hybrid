@@ -1,7 +1,11 @@
 package com.tba.api.entity;
 
+import java.util.List;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Represents a place the player can visit
@@ -23,6 +27,13 @@ public class Room {
     @NotBlank
     @Column(name = "name", nullable = false)
     private String name;
+    /**
+     * List of all items present in the room
+     */
+    @OneToMany
+    @JoinColumn(name = "room_id")
+    @JsonIgnore
+    private List<Item> items;
 
     public Integer getId() {
         return id;
@@ -38,5 +49,13 @@ public class Room {
     
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.tba.api.entity.Item;
 import com.tba.api.entity.Room;
 import com.tba.api.repository.RoomRepository;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -84,5 +85,13 @@ public class RoomController {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Room #" + id + " does not exist.");
         }
+    }
+
+    @GetMapping("/{id}/items")
+    public List<Item> listItems(@PathVariable int id)
+    {
+        return roomRepository.findById(id).orElseThrow(
+            () -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Room #" + id + " does not exist."); }
+        ).getItems();
     }
 }
