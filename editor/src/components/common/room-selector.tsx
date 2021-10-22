@@ -1,7 +1,7 @@
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { Form } from "react-bootstrap";
 import { Room } from "../../types/api";
-import { RoomEditorContext } from "../room-editor/room-editor-context";
+import { RoomCollectionContext } from "./entity-collection-context";
 
 interface RoomSelectorProps {
   selectedRoom?: Room;
@@ -9,7 +9,7 @@ interface RoomSelectorProps {
 }
 
 const RoomSelector: FC<RoomSelectorProps> = ({ selectedRoom, onChangeHook }) => {
-  const { rooms, isValidating, actions } = useContext(RoomEditorContext);
+  const { data: rooms, isValidating, actions } = RoomCollectionContext.useValue();
 
   if (!rooms && isValidating) {
     return (

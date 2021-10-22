@@ -1,5 +1,10 @@
 export type Id = number;
 
+export enum ResourceIdentifier {
+  Room = 'rooms',
+  Item = 'items',
+}
+
 export interface Entity {
   id: Id;
 }

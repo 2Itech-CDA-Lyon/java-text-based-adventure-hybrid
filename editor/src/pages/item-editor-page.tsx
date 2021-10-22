@@ -1,16 +1,12 @@
-import { FC, useContext } from "react";
-import { Container, Table, Button, Form } from "react-bootstrap";
+import { FC } from "react";
+import { Container, Table, Button } from "react-bootstrap";
 import { RouteComponentProps } from "react-router";
 import { ModifiableText, RoomSelector } from "../components/common";
+import { ItemCollectionContext, RoomCollectionContext } from "../components/common/entity-collection-context";
 import { AddItemForm } from "../components/item-editor";
-import ItemEditorContextProvider, { ItemEditorContext } from "../components/item-editor/item-editor-context";
-import { RoomEditorContextProvider } from "../components/room-editor";
-import { RoomEditorContext } from "../components/room-editor/room-editor-context";
-import { Room } from "../types/api";
 
 const ItemEditorPageContent: FC = () => {
-  const { rooms, actions: { findById: findRoomById }, isValidating: isValidatingRooms } = useContext(RoomEditorContext);
-  const { items, actions, isValidating } = useContext(ItemEditorContext);
+  const { data: items, actions, isValidating } = ItemCollectionContext.useValue();
 
   return (
     <Container>
@@ -65,11 +61,11 @@ const ItemEditorPageContent: FC = () => {
 
 const ItemEditorPage: FC<RouteComponentProps> = () => {
   return (
-    <RoomEditorContextProvider>
-      <ItemEditorContextProvider>
+    <RoomCollectionContext.Provider>
+      <ItemCollectionContext.Provider>
         <ItemEditorPageContent />
-      </ItemEditorContextProvider>
-    </RoomEditorContextProvider>
+      </ItemCollectionContext.Provider>
+    </RoomCollectionContext.Provider>
   )
 }
 

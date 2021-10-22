@@ -1,12 +1,12 @@
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { Button, Container, Table } from "react-bootstrap";
 import { RouteComponentProps } from "react-router";
 import { ModifiableText } from "../components/common";
-import { AddRoomForm, RoomEditorContextProvider } from "../components/room-editor";
-import { RoomEditorContext } from "../components/room-editor/room-editor-context";
+import { RoomCollectionContext } from "../components/common/entity-collection-context";
+import { AddRoomForm } from "../components/room-editor";
 
 const RoomEditorPageContent = () => {
-  const { rooms, isValidating, actions } = useContext(RoomEditorContext);
+  const { data: rooms, isValidating, actions } = RoomCollectionContext.useValue();
 
   return (
     <Container>
@@ -54,9 +54,9 @@ const RoomEditorPageContent = () => {
 
 const RoomEditorPage: FC<RouteComponentProps> = () => {
   return (
-    <RoomEditorContextProvider>
+    <RoomCollectionContext.Provider>
       <RoomEditorPageContent />
-    </RoomEditorContextProvider>
+    </RoomCollectionContext.Provider>
   );
 }
 

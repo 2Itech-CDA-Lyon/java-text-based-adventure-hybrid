@@ -1,13 +1,12 @@
-import { useContext, useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import { Room } from "../../types/api";
 import { RoomSelector } from "../common";
-import { RoomEditorContext } from "../room-editor/room-editor-context";
-import { ItemEditorContext } from "./item-editor-context";
+import { ItemCollectionContext, RoomCollectionContext } from "../common/entity-collection-context";
 
 const AddItemForm = () => {
-  const { rooms } = useContext(RoomEditorContext);
-  const { actions } = useContext(ItemEditorContext);
+  const { data: rooms } = RoomCollectionContext.useValue();
+  const { actions } = ItemCollectionContext.useValue();
   
   const [name, setName] = useState('');
   const [room, setRoom] = useState<Room>({ id: 0, name: '' });
