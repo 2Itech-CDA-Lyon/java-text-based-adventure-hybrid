@@ -1,6 +1,7 @@
 export type Id = number;
 
 export enum ResourceIdentifier {
+  Direction = 'directions',
   Room = 'rooms',
   Item = 'items',
 }
@@ -29,6 +30,11 @@ export interface RoomConnection extends Entity {
 export interface Item extends Entity {
   name: string;
   room?: Room;
+}
+
+export interface DirectionInput {
+  name: string;
+  command: string;
 }
 
 export interface RoomInput {

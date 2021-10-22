@@ -1,6 +1,6 @@
 import { createContext, FC, useContext } from "react";
 import useSWR from "swr";
-import { Entity, Id, Item, ItemInput, ResourceIdentifier, Room, RoomInput } from "../../types/api";
+import { Direction, DirectionInput, Entity, Id, Item, ItemInput, ResourceIdentifier, Room, RoomInput } from "../../types/api";
 import apiFetcher from "../../utils/apiFetcher";
 
 interface EntityCollectionContextValue<E extends Entity, I> {
@@ -119,3 +119,4 @@ const generateEntityCollectionContext = <E extends Entity, I>(resourceIdentifier
 
 export const RoomCollectionContext = generateEntityCollectionContext<Room, RoomInput>(ResourceIdentifier.Room);
 export const ItemCollectionContext = generateEntityCollectionContext<Item, ItemInput>(ResourceIdentifier.Item);
+export const DirectionCollectionContext = generateEntityCollectionContext<Direction, DirectionInput>(ResourceIdentifier.Direction);
